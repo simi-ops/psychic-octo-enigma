@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Practice Test Page</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-section h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        .complex-formatting {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h1>🎯 Typing Practice Extension Test Page</h1>
+        <p><strong>Instructions:</strong></p>
+        <ol>
+            <li>Install the extension in your browser</li>
+            <li>Click the extension button to activate selection mode</li>
+            <li>Select any text below and start typing</li>
+            <li>Use keyboard shortcuts: Tab (skip char), Shift+Tab (skip paragraph), Esc (exit)</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Simple Text Test</h2>
+        <p>This is a simple paragraph for basic typing practice. It contains common words and punctuation marks that you might encounter in everyday reading.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Complex Formatting Test</h2>
+        <div class="complex-formatting">
+            <p>This paragraph contains <strong>bold text</strong>, <em>italic text</em>, and <code>code snippets</code>. It also has <a href="#">links</a> and various punctuation: commas, semicolons; dashes—and quotes "like this".</p>
+            
+            <ul>
+                <li>List item with <strong>formatting</strong></li>
+                <li>Another item with <em>emphasis</em></li>
+                <li>Final item with <code>inline code</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Multi-paragraph Test</h2>
+        <p>This is the first paragraph of a multi-paragraph section. It should allow you to practice typing across paragraph boundaries using the Shift+Tab shortcut.</p>
+        
+        <p>This is the second paragraph. When you use Shift+Tab, the cursor should jump to the beginning of this paragraph, allowing you to skip difficult sections.</p>
+        
+        <p>This is the third and final paragraph. It demonstrates how the extension handles multiple text blocks within a single selection.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Special Characters Test</h2>
+        <p>This section tests special characters: @#$%^&*()_+-={}[]|\:";'<>?,./ and numbers: 1234567890. It also includes accented characters: café, naïve, résumé, and symbols: ©®™€£¥.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Long Text Test</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Edge Cases Test</h2>
+        <p>This section tests edge cases: text with    multiple    spaces, text with
+        line breaks, and text with tabs	between	words.</p>
+        
+        <p>It also includes very short text: Hi! And text with unusual punctuation... like ellipses, em-dashes—like this, and parentheses (like this).</p>
+    </div>
+
+    <script>
+        // Add some dynamic content to test extension robustness
+        setTimeout(() => {
+            const dynamicSection = document.createElement('div');
+            dynamicSection.className = 'test-section';
+            dynamicSection.innerHTML = `
+                <h2>Dynamic Content Test</h2>
+                <p>This content was added dynamically after page load to test how the extension handles DOM changes.</p>
+            `;
+            document.body.appendChild(dynamicSection);
+        }, 2000);
+    </script>
+</body>
+</html>

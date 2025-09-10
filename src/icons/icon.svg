@@ -1,0 +1,30 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="#007acc" stroke="#005a99" stroke-width="2"/>
+  
+  <!-- Keyboard representation -->
+  <rect x="24" y="48" width="80" height="32" rx="4" fill="white" opacity="0.9"/>
+  
+  <!-- Keys -->
+  <rect x="28" y="52" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="38" y="52" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="48" y="52" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="58" y="52" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="68" y="52" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="78" y="52" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="88" y="52" width="8" height="6" rx="1" fill="#007acc"/>
+  
+  <rect x="30" y="62" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="42" y="62" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="54" y="62" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="66" y="62" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="78" y="62" width="8" height="6" rx="1" fill="#007acc"/>
+  <rect x="90" y="62" width="8" height="6" rx="1" fill="#007acc"/>
+  
+  <rect x="36" y="72" width="56" height="6" rx="1" fill="#007acc"/>
+  
+  <!-- Cursor/typing indicator -->
+  <rect x="96" y="52" width="2" height="6" fill="#ff6b35">
+    <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+  </rect>
+</svg>

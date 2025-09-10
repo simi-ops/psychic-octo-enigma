@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webpage Typing Practice</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <h1>Webpage Typing Practice</h1>
+    
+    <!-- Main Control Section -->
+    <div class="control-section">
+      <button id="start-stop-btn" class="primary-btn">Start Typing Mode</button>
+      <div id="session-status" class="status-display">Ready to start</div>
+    </div>
+    
+    <!-- Session Metrics -->
+    <div id="metrics-section" class="metrics-section hidden">
+      <div class="metric-item">
+        <span class="metric-label">WPM:</span>
+        <span id="current-wpm" class="metric-value">0</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label">Accuracy:</span>
+        <span id="current-accuracy" class="metric-value">100%</span>
+      </div>
+    </div>
+    
+    <div class="settings-section">
+      <h2>Settings</h2>
+      
+      <div class="setting-item">
+        <label class="setting-label">
+          <input type="checkbox" id="hints-visibility-toggle" class="setting-checkbox">
+          <span class="setting-text">Show hints panel during typing</span>
+        </label>
+      </div>
+      
+      <div class="hint-controls">
+        <button id="show-hints-btn" class="control-btn">Show Hints</button>
+        <button id="hide-hints-btn" class="control-btn">Hide Hints</button>
+      </div>
+      
+      <div class="setting-item">
+        <button id="reset-settings-btn" class="control-btn reset-btn">Reset All Settings</button>
+      </div>
+    </div>
+    
+    <div class="instructions">
+      <p id="instruction-text">Click "Start Typing Mode", then select text to practice.</p>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

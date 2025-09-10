@@ -1,0 +1,26 @@
+{
+  "name": "webpage-typing-practice",
+  "version": "1.0.0",
+  "description": "Browser extension for typing practice on any webpage content",
+  "main": "src/manifest.json",
+  "scripts": {
+    "build": "echo 'No build process needed for basic extension'",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "typing",
+    "practice",
+    "browser-extension",
+    "chrome-extension",
+    "firefox-extension"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^30.1.2",
+    "jsdom": "^22.0.0"
+  }
+}

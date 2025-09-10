@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Hints Controls - Webpage Typing Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .test-text {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .feature-list {
+            background: #f3e5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Page for Hints Controls Implementation</h1>
+    
+    <div class="instructions">
+        <h2>Testing Instructions</h2>
+        <p>This page is designed to test the hint visibility controls implementation for the Webpage Typing Practice extension.</p>
+        <ol>
+            <li>Click the extension button to activate selection mode</li>
+            <li>Select any text below to start a typing practice session</li>
+            <li>Test the following hint visibility controls:</li>
+            <ul>
+                <li><strong>X button</strong> on the hints panel to hide it</li>
+                <li><strong>Right-click</strong> the extension button for context menu options</li>
+                <li><strong>Popup controls</strong> to show/hide hints</li>
+                <li><strong>Settings persistence</strong> across sessions</li>
+            </ul>
+        </ol>
+    </div>
+
+    <div class="feature-list">
+        <h2>Features Being Tested (Task 6.2)</h2>
+        <ul>
+            <li>✅ X button to hide hints panel</li>
+            <li>✅ Right-click context menu on extension button</li>
+            <li>✅ Functionality to reopen hints from context menu</li>
+            <li>✅ Store hint visibility preference in extension settings</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Sample Text for Typing Practice</h2>
+        
+        <div class="test-text">
+            <h3>Simple Text</h3>
+            <p>The quick brown fox jumps over the lazy dog. This sentence contains every letter of the alphabet and is perfect for typing practice.</p>
+        </div>
+
+        <div class="test-text">
+            <h3>Text with Formatting</h3>
+            <p>This paragraph contains <strong>bold text</strong>, <em>italic text</em>, and <code>code snippets</code>. It also includes <a href="#">links</a> and various punctuation marks: commas, semicolons; parentheses (like these), and quotation marks "for testing".</p>
+        </div>
+
+        <div class="test-text">
+            <h3>Multi-paragraph Text</h3>
+            <p>This is the first paragraph of a multi-paragraph selection. It contains regular text that should be easy to type and practice with.</p>
+            <p>This is the second paragraph. It demonstrates how the typing interface handles paragraph breaks and maintains proper formatting throughout the typing session.</p>
+            <p>The third paragraph includes some numbers like 123, 456, and 789, as well as special characters: @#$%^&*()_+-=[]{}|;':\",./<>?</p>
+        </div>
+
+        <div class="test-text">
+            <h3>Technical Content</h3>
+            <p>JavaScript functions like <code>console.log()</code> and <code>document.querySelector()</code> are commonly used in web development. Variables can be declared using <code>let</code>, <code>const</code>, or <code>var</code> keywords.</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Testing Checklist</h2>
+        <p>Use this checklist to verify all functionality works correctly:</p>
+        <ul>
+            <li>□ Start a typing session by selecting text</li>
+            <li>□ Verify hints panel appears with WPM, accuracy, and shortcuts</li>
+            <li>□ Click X button on hints panel - should hide the panel</li>
+            <li>□ Right-click extension button - context menu should appear</li>
+            <li>□ Use "Show Hints Panel" from context menu - should show hints</li>
+            <li>□ Use "Hide Hints Panel" from context menu - should hide hints</li>
+            <li>□ Open extension popup and test show/hide buttons</li>
+            <li>□ Toggle hints visibility checkbox in popup</li>
+            <li>□ End session and start new one - hints visibility should persist</li>
+            <li>□ Test on different websites to ensure consistency</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Expected Behavior</h2>
+        <ul>
+            <li><strong>Hints Panel:</strong> Should show current WPM, accuracy, time, and keyboard shortcuts</li>
+            <li><strong>X Button:</strong> Should hide hints panel and save preference</li>
+            <li><strong>Context Menu:</strong> Should provide options to show/hide hints</li>
+            <li><strong>Popup Controls:</strong> Should allow toggling hints visibility</li>
+            <li><strong>Settings Persistence:</strong> Hint visibility preference should be remembered</li>
+            <li><strong>Error Handling:</strong> Should show appropriate messages for invalid actions</li>
+        </ul>
+    </div>
+
+    <script>
+        // Add some interactivity for testing
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded for hints controls testing');
+            
+            // Add click handlers to test sections for easy selection
+            const testTexts = document.querySelectorAll('.test-text');
+            testTexts.forEach(section => {
+                section.addEventListener('click', function() {
+                    // Select the text content for easy testing
+                    const range = document.createRange();
+                    range.selectNodeContents(this);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
