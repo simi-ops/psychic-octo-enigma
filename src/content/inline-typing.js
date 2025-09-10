@@ -12,11 +12,14 @@ class InlineTyping {
   }
 
   startTyping(paragraphElement) {
+    console.log('InlineTyping.startTyping called');
     this.originalElement = paragraphElement;
     this.originalText = paragraphElement.textContent;
     this.currentPosition = 0;
     this.errorCount = 0;
     this.isActive = true;
+
+    console.log('Starting typing with text length:', this.originalText.length);
 
     // Show stats popup
     window.statsPopup.show(this.originalText.length);
@@ -58,7 +61,9 @@ class InlineTyping {
       e.preventDefault();
       
       if (e.key === 'Escape') {
-        this.cleanup();
+        console.log('Escape pressed, showing summary before cleanup');
+        window.statsPopup.showSummary();
+        this.cleanupWithoutHidingPopup();
         return;
       }
 
@@ -69,11 +74,14 @@ class InlineTyping {
         span.classList.add('completed');
         this.currentPosition++;
         
+        console.log(`Correct key: ${e.key}, position: ${this.currentPosition}/${this.originalText.length}`);
+        
         // Update stats
         window.statsPopup.update(this.currentPosition, this.errorCount);
         
         if (this.currentPosition >= this.originalText.length) {
           // Show summary and cleanup without hiding popup
+          console.log('Typing completed, showing summary');
           window.statsPopup.showSummary();
           this.cleanupWithoutHidingPopup();
         } else {
@@ -82,6 +90,7 @@ class InlineTyping {
       } else {
         this.errorCount++;
         span.classList.add('error');
+        console.log(`Wrong key: got "${e.key}", expected "${expected}"`);
         window.statsPopup.update(this.currentPosition, this.errorCount);
         setTimeout(() => span.classList.remove('error'), 300);
       }
@@ -113,8 +122,16 @@ class InlineTyping {
 const style = document.createElement('style');
 style.textContent = `
   .typing-char { position: relative; }
-  .typing-char.completed { background: #c8e6c9; }
-  .typing-char.error { background: #ffcdd2; }
+  .typing-char.completed { background: #c8e6c9 !important; }
+  .typing-char.error { 
+    background: #ffcdd2 !important; 
+    animation: shake 0.3s ease-in-out !important;
+  }
+  @keyframes shake { 
+    0%, 100% { transform: translateX(0); } 
+    25% { transform: translateX(-2px); } 
+    75% { transform: translateX(2px); } 
+  }
 `;
 document.head.appendChild(style);
 
