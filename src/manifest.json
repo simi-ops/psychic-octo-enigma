@@ -28,6 +28,7 @@
         "content/settings-manager.js",
         "content/metrics-calculator.js",
         "content/hints-ui.js",
+        "content/stats-popup.js",
         "content/inline-typing.js",
         "content/content-script.js"
       ],

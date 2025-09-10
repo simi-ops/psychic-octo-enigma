@@ -8,13 +8,18 @@ class InlineTyping {
     this.currentPosition = 0;
     this.isActive = false;
     this.keyHandler = null;
+    this.errorCount = 0;
   }
 
   startTyping(paragraphElement) {
     this.originalElement = paragraphElement;
     this.originalText = paragraphElement.textContent;
     this.currentPosition = 0;
+    this.errorCount = 0;
     this.isActive = true;
+
+    // Show stats popup
+    window.statsPopup.show(this.originalText.length);
 
     // Make editable and clear content
     paragraphElement.contentEditable = true;
@@ -64,13 +69,20 @@ class InlineTyping {
         span.classList.add('completed');
         this.currentPosition++;
         
+        // Update stats
+        window.statsPopup.update(this.currentPosition, this.errorCount);
+        
         if (this.currentPosition >= this.originalText.length) {
-          setTimeout(() => this.cleanup(), 1000);
+          // Show summary and cleanup without hiding popup
+          window.statsPopup.showSummary();
+          this.cleanupWithoutHidingPopup();
         } else {
           this.setCursor(this.currentPosition);
         }
       } else {
+        this.errorCount++;
         span.classList.add('error');
+        window.statsPopup.update(this.currentPosition, this.errorCount);
         setTimeout(() => span.classList.remove('error'), 300);
       }
     };
@@ -78,7 +90,7 @@ class InlineTyping {
     document.addEventListener('keydown', this.keyHandler);
   }
 
-  cleanup() {
+  cleanupWithoutHidingPopup() {
     if (this.originalElement) {
       this.originalElement.contentEditable = false;
       this.originalElement.textContent = this.originalText;
@@ -89,6 +101,11 @@ class InlineTyping {
     }
     
     this.isActive = false;
+  }
+
+  cleanup() {
+    this.cleanupWithoutHidingPopup();
+    window.statsPopup.hide();
   }
 }
 
