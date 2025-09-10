@@ -1,66 +1,78 @@
-# Requirements Document
+# Webpage Typing Practice Extension - Requirements
 
-## Introduction
+## Overview
+A browser extension that transforms any webpage content into interactive typing practice sessions with inline typing directly on the original text.
 
-This feature is a browser extension that transforms any webpage content into an interactive typing practice session while preserving the original formatting. Users can select text from any webpage and practice typing it in place, with keyboard shortcuts for navigation and session management. The extension provides real-time feedback on typing speed and accuracy.
+## Core Features
 
-## Requirements
+### 1. Text Selection & Practice
+- **Paragraph Selection**: Click extension button to activate selection mode
+- **Visual Highlighting**: All suitable paragraphs highlighted with green outline
+- **Inline Typing**: Type directly on the original paragraph location
+- **Character-by-Character**: Each character wrapped in spans for individual feedback
+- **Real-time Feedback**: Green highlighting for correct, red flash for errors
 
-### Requirement 1
+### 2. Statistics & Metrics
+- **Live Stats Popup**: Shows WPM, accuracy, and progress during typing
+- **Real-time Updates**: Stats update with each keystroke
+- **Session Summary**: Complete stats shown at end of session
+- **Personal Records**: Track best WPM, accuracy, total sessions, average WPM
+- **New Record Alerts**: Celebrate when breaking personal records
 
-**User Story:** As a user, I want to select text on any webpage and convert it into a typing practice session, so that I can practice typing while reading content I'm interested in.
+### 3. User Interface
+- **Selection Mode Indicator**: Visual feedback when selection mode is active
+- **Floating Stats Panel**: Non-intrusive popup in top-right corner
+- **Progress Tracking**: Current position / total characters
+- **Instructions**: Clear guidance on how to use the extension
 
-#### Acceptance Criteria
+### 4. Session Management
+- **Escape to Exit**: Press Escape to end session and see summary
+- **Auto-completion**: Summary appears when paragraph is fully typed
+- **Clean Restoration**: Original text restored after session ends
+- **Persistent Records**: Personal stats saved across browser sessions
 
-1. WHEN the user clicks the extension button THEN the system SHALL activate text selection mode
-2. WHEN the user selects text on a webpage THEN the system SHALL transform the selected text into an interactive typing practice interface
-3. WHEN the typing practice session starts THEN the system SHALL preserve the original formatting and layout of the selected text
-4. WHEN the user types correctly THEN the system SHALL highlight completed characters and advance the cursor
-5. WHEN the user types incorrectly THEN the system SHALL indicate the error and prevent advancement until corrected
+### 5. Browser Integration
+- **Extension Button**: Click to activate paragraph selection mode
+- **Context Menu**: Right-click extension for quick actions
+- **Popup Interface**: Extension popup for settings and controls
+- **Cross-browser**: Compatible with Chrome, Firefox, Edge
 
-### Requirement 2
+## Technical Requirements
 
-**User Story:** As a user, I want keyboard shortcuts to navigate and control my typing practice session, so that I can efficiently manage difficult characters and text sections.
+### Browser Extension (Manifest V3)
+- Content scripts for webpage interaction
+- Background service worker for extension lifecycle
+- Storage API for persistent data
+- Cross-origin permissions for all websites
 
-#### Acceptance Criteria
+### Content Modification
+- Non-destructive text replacement using spans
+- Preserve original formatting and layout
+- Restore original content on session end
+- Handle dynamic content gracefully
 
-1. WHEN the user presses Tab THEN the system SHALL skip over the current character that is hard to type on a keyboard
-2. WHEN the user presses Shift-Tab THEN the system SHALL skip to the next text element or paragraph
-3. WHEN the user presses Esc THEN the system SHALL end the typing practice session and restore the original webpage
-4. WHEN shortcuts are used THEN the system SHALL update the typing position accordingly without affecting accuracy metrics
+### Performance
+- Minimal impact on webpage performance
+- Efficient DOM manipulation
+- Clean event listener management
+- Memory leak prevention
 
-### Requirement 3
+## User Experience Requirements
 
-**User Story:** As a user, I want to see my typing speed and available shortcuts during practice, so that I can monitor my progress and remember available controls.
+### Accessibility
+- Keyboard-only navigation support
+- Screen reader compatibility
+- High contrast mode support
+- Clear visual feedback
 
-#### Acceptance Criteria
+### Usability
+- One-click activation
+- Intuitive paragraph selection
+- Clear progress indication
+- Immediate feedback on typing errors
 
-1. WHEN a typing practice session is active THEN the system SHALL display current typing speed in words per minute
-2. WHEN a typing practice session is active THEN the system SHALL show available keyboard shortcuts
-3. WHEN the user clicks the X button on the hints THEN the system SHALL hide the speed and shortcuts display
-4. WHEN the user right-clicks the extension button THEN the system SHALL show a context menu with options to reopen hints
-5. WHEN hints are reopened THEN the system SHALL restore the typing speed and shortcuts display
-
-### Requirement 4
-
-**User Story:** As a user, I want the extension to work seamlessly across different websites and text formats, so that I can practice typing on any content I encounter.
-
-#### Acceptance Criteria
-
-1. WHEN the extension is installed THEN the system SHALL be available on all websites
-2. WHEN text contains various HTML elements (links, bold, italic, etc.) THEN the system SHALL preserve the visual formatting during typing practice
-3. WHEN text spans multiple paragraphs or sections THEN the system SHALL maintain proper text flow and structure
-4. WHEN the webpage has complex layouts THEN the system SHALL adapt the typing interface without breaking the page design
-5. IF the selected text contains non-typeable elements THEN the system SHALL handle them gracefully with appropriate skip mechanisms
-
-### Requirement 5
-
-**User Story:** As a user, I want accurate typing metrics and feedback, so that I can track my improvement and identify areas for practice.
-
-#### Acceptance Criteria
-
-1. WHEN the user types during a session THEN the system SHALL calculate and display real-time words per minute
-2. WHEN the user makes typing errors THEN the system SHALL track accuracy percentage
-3. WHEN characters are skipped using shortcuts THEN the system SHALL exclude them from accuracy calculations
-4. WHEN a typing session ends THEN the system SHALL provide a summary of performance metrics
-5. WHEN the user starts a new session THEN the system SHALL reset metrics for the new content
+### Reliability
+- Graceful error handling
+- Session recovery capabilities
+- Clean state management
+- Consistent behavior across websites

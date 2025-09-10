@@ -1,244 +1,176 @@
-# Design Document
+# Webpage Typing Practice Extension - Design Document
 
-## Overview
-
-The Webpage Typing Practice extension is a browser extension that transforms selected webpage content into interactive typing practice sessions. The extension uses a content script architecture to inject typing functionality directly into webpages while preserving original formatting and layout.
-
-## Architecture
+## Architecture Overview
 
 ### Extension Structure
-- **Manifest V3 Browser Extension**: Modern extension architecture with proper permissions
-- **Content Script**: Injected into all webpages to handle text selection and typing interface
-- **Background Script**: Manages extension lifecycle and cross-tab communication
-- **Popup Interface**: Extension button interface with start/stop controls and settings
-- **Context Menu Integration**: Right-click menu options for hint management
+```
+src/
+├── manifest.json           # Extension manifest (Manifest V3)
+├── background/
+│   └── background.js       # Service worker for extension lifecycle
+├── content/
+│   ├── content-script.js   # Main content script
+│   ├── inline-typing.js    # Inline typing functionality
+│   ├── stats-popup.js      # Statistics display
+│   ├── personal-records.js # Personal records tracking
+│   └── typing-interface.css # Styles for typing interface
+├── popup/
+│   ├── popup.html          # Extension popup interface
+│   ├── popup.css           # Popup styles
+│   └── popup.js            # Popup functionality
+└── icons/                  # Extension icons
+```
 
-### Core Components
-1. **Text Selection Handler**: Captures user text selection and prepares it for typing practice
-2. **Typing Interface Engine**: Renders the interactive typing overlay with preserved formatting
-3. **Input Processing System**: Handles keyboard input, validation, and cursor management
-4. **Metrics Calculator**: Tracks typing speed, accuracy, and session statistics
-5. **Shortcut Manager**: Processes keyboard shortcuts for navigation and control
-6. **UI State Manager**: Manages hint visibility and extension state
+## Core Components
 
-## Components and Interfaces
+### 1. InlineTyping Class
+**Purpose**: Handles direct typing on original paragraph elements
 
-### TextSelectionHandler
-```typescript
-interface TextSelectionHandler {
-  captureSelection(): SelectedText
-  validateSelection(selection: Selection): boolean
-  extractFormattedContent(selection: Selection): FormattedContent
-}
+**Key Methods**:
+- `startTyping(paragraphElement)` - Initialize typing session
+- `setupKeyListener()` - Handle keystroke events
+- `setCursor(position)` - Position cursor at character
+- `cleanup()` - Restore original content
 
-interface SelectedText {
-  content: string
-  htmlContent: string
-  boundingRect: DOMRect
-  parentElement: HTMLElement
+**Features**:
+- Converts paragraph text to individual character spans
+- Real-time character validation and highlighting
+- Escape key handling for session termination
+
+### 2. StatsPopup Class
+**Purpose**: Display real-time typing statistics and session summary
+
+**Key Methods**:
+- `show(totalCharacters)` - Display initial stats popup
+- `update(completedChars, errorCount)` - Update live statistics
+- `showSummary()` - Display final session results
+
+**Metrics Calculated**:
+- Words Per Minute (WPM): `(completedChars / 5) / (timeElapsed / 60)`
+- Accuracy: `((completedChars - errors) / completedChars) * 100`
+- Progress: `currentPosition / totalCharacters`
+
+### 3. PersonalRecords Class
+**Purpose**: Track and persist user's typing performance over time
+
+**Key Methods**:
+- `updateRecords(wpm, accuracy)` - Check for new records
+- `getRecords()` - Retrieve current records
+- `saveRecords()` - Persist to localStorage
+
+**Data Stored**:
+- Best WPM achieved
+- Best accuracy percentage
+- Total sessions completed
+- Running average WPM
+
+### 4. Content Script (content-script.js)
+**Purpose**: Main orchestration and webpage interaction
+
+**Key Functions**:
+- `activateSelectionMode()` - Highlight available paragraphs
+- `processSelectedParagraph()` - Start typing session
+- `findAllParagraphs()` - Identify suitable text elements
+- `isParagraphSuitable()` - Validate paragraph for typing
+
+## User Interaction Flow
+
+### 1. Activation
+1. User clicks extension button
+2. `activateSelectionMode()` called
+3. All suitable paragraphs highlighted with green outline
+4. Selection mode indicator appears
+
+### 2. Paragraph Selection
+1. User clicks on highlighted paragraph
+2. `processSelectedParagraph()` called
+3. Selection mode deactivated
+4. `InlineTyping.startTyping()` initiated
+
+### 3. Typing Session
+1. Paragraph content converted to character spans
+2. Stats popup appears showing initial metrics
+3. User types, each keystroke validated
+4. Real-time feedback: green for correct, red flash for errors
+5. Stats updated with each character
+
+### 4. Session Completion
+1. Either full paragraph typed or Escape pressed
+2. `showSummary()` displays final statistics
+3. Personal records updated if new records achieved
+4. Original paragraph content restored
+5. Session cleanup performed
+
+## Technical Implementation
+
+### Character-Level Processing
+```javascript
+// Convert paragraph to individual character spans
+for (let i = 0; i < text.length; i++) {
+  const span = document.createElement('span');
+  span.textContent = text[i];
+  span.className = 'typing-char';
+  paragraph.appendChild(span);
 }
 ```
 
-### TypingInterface
-```typescript
-interface TypingInterface {
-  initialize(content: FormattedContent, container: HTMLElement): void
-  renderTypingOverlay(): HTMLElement
-  updateCursor(position: number): void
-  highlightProgress(completedChars: number): void
-  showError(position: number): void
-  cleanup(): void
-}
-
-interface FormattedContent {
-  text: string
-  formatting: FormatNode[]
-  skipPositions: number[]
+### Real-Time Validation
+```javascript
+if (inputKey === expectedChar) {
+  span.classList.add('completed');
+  position++;
+} else {
+  span.classList.add('error');
+  errorCount++;
 }
 ```
 
-### InputProcessor
-```typescript
-interface InputProcessor {
-  processKeyInput(event: KeyboardEvent): InputResult
-  validateCharacter(input: string, expected: string): boolean
-  handleShortcut(shortcut: ShortcutType): void
-  getCurrentPosition(): number
-}
+### Statistics Calculation
+```javascript
+const wpm = (completedChars / 5) / (timeElapsed / 60);
+const accuracy = ((completedChars - errors) / completedChars) * 100;
+```
 
-enum ShortcutType {
-  SKIP_CHAR = 'Tab',
-  SKIP_PARAGRAPH = 'Shift+Tab',
-  EXIT_SESSION = 'Escape'
+## Styling and Visual Feedback
+
+### Character States
+- **Default**: Normal text appearance
+- **Completed**: Green background (`#c8e6c9`)
+- **Error**: Red background with shake animation (`#ffcdd2`)
+- **Current**: Cursor positioned at character
+
+### UI Components
+- **Stats Popup**: Fixed position top-right, non-intrusive
+- **Selection Highlights**: Green outline on hoverable paragraphs
+- **Progress Indicators**: Character count and percentage complete
+
+## Data Persistence
+
+### Local Storage Schema
+```javascript
+{
+  "typing-practice-records": {
+    "bestWPM": 65,
+    "bestAccuracy": 98,
+    "totalSessions": 42,
+    "averageWPM": 58
+  }
 }
 ```
 
-### MetricsCalculator
-```typescript
-interface MetricsCalculator {
-  startSession(): void
-  recordKeystroke(correct: boolean): void
-  recordSkip(reason: SkipReason): void
-  calculateWPM(): number
-  calculateAccuracy(): number
-  getSessionSummary(): SessionMetrics
-}
+## Performance Considerations
 
-interface SessionMetrics {
-  wpm: number
-  accuracy: number
-  totalCharacters: number
-  correctCharacters: number
-  timeElapsed: number
-  skippedCharacters: number
-}
-```
+### Memory Management
+- Event listeners properly removed on cleanup
+- DOM elements restored to original state
+- No memory leaks from abandoned sessions
 
-## Data Models
+### DOM Efficiency
+- Minimal DOM manipulation during typing
+- Efficient character span creation
+- Clean restoration of original content
 
-### Session State
-```typescript
-interface TypingSession {
-  id: string
-  content: FormattedContent
-  currentPosition: number
-  startTime: Date
-  isActive: boolean
-  metrics: SessionMetrics
-  originalElement: HTMLElement
-  overlayElement: HTMLElement
-}
-```
-
-### Extension Settings
-```typescript
-interface ExtensionSettings {
-  hintsVisible: boolean
-  skipDifficultChars: boolean
-  highlightColor: string
-  errorColor: string
-  completedColor: string
-}
-```
-
-### Popup Interface
-```typescript
-interface PopupInterface {
-  startTypingMode(): void
-  stopTypingMode(): void
-  getSessionStatus(): SessionStatus
-  showSettings(): void
-  toggleHints(): void
-}
-
-interface SessionStatus {
-  isActive: boolean
-  isSelectionMode: boolean
-  hasActiveSession: boolean
-  currentWPM?: number
-  currentAccuracy?: number
-}
-```
-
-### Format Preservation
-```typescript
-interface FormatNode {
-  type: 'text' | 'element'
-  content: string
-  tagName?: string
-  attributes?: Record<string, string>
-  styles?: CSSStyleDeclaration
-  startIndex: number
-  endIndex: number
-}
-```
-
-## Error Handling
-
-### Input Validation
-- Validate text selection before creating typing session
-- Handle empty or invalid selections gracefully
-- Prevent multiple simultaneous sessions on same page
-
-### DOM Manipulation Safety
-- Check for element existence before manipulation
-- Handle dynamic content changes during typing sessions
-- Restore original state on unexpected errors
-
-### Cross-Browser Compatibility
-- Feature detection for browser-specific APIs
-- Fallback mechanisms for unsupported features
-- Graceful degradation for older browsers
-
-### Error Recovery
-```typescript
-interface ErrorHandler {
-  handleSelectionError(error: SelectionError): void
-  handleTypingError(error: TypingError): void
-  restoreOriginalState(session: TypingSession): void
-  logError(error: Error, context: string): void
-}
-```
-
-## Testing Strategy
-
-### Unit Testing
-- Test individual components in isolation
-- Mock DOM interactions and browser APIs
-- Validate typing logic and metrics calculations
-- Test keyboard shortcut handling
-
-### Integration Testing
-- Test content script injection and initialization
-- Validate text selection and overlay rendering
-- Test cross-component communication
-- Verify settings persistence and retrieval
-
-### End-to-End Testing
-- Test complete user workflows on sample webpages
-- Validate typing sessions across different text formats
-- Test keyboard shortcuts and session management
-- Verify metrics accuracy and hint visibility
-
-### Browser Compatibility Testing
-- Test on Chrome, Firefox, Safari, and Edge
-- Validate Manifest V3 compatibility
-- Test on various webpage layouts and designs
-- Verify performance on complex pages
-
-### Performance Testing
-- Measure typing response latency
-- Test memory usage during long sessions
-- Validate cleanup and resource management
-- Test on pages with heavy JavaScript
-
-## Implementation Considerations
-
-### User Interface Design
-- **Start/Stop Button**: Primary action button in popup for activating/deactivating typing mode
-- **Visual State Indicators**: Clear indication of current mode (inactive, selection mode, active session)
-- **Session Status Display**: Show current typing metrics and session information in popup
-- **Quick Actions**: Easy access to common functions like showing/hiding hints
-
-### Content Security Policy
-- Handle CSP restrictions on target websites
-- Use appropriate injection methods for styling
-- Avoid inline scripts and styles where possible
-
-### Accessibility
-- Maintain keyboard navigation compatibility
-- Preserve screen reader functionality
-- Ensure sufficient color contrast for highlights
-- Support high contrast and dark mode themes
-
-### Performance Optimization
-- Minimize DOM manipulation during typing
-- Use efficient event handling and debouncing
-- Implement lazy loading for complex formatting
-- Optimize overlay rendering for smooth experience
-
-### Privacy and Security
-- No data collection or external communication
-- Local storage only for user preferences
-- Secure handling of webpage content
-- Respect website permissions and restrictions
+### Browser Compatibility
+- Manifest V3 for modern browsers
+- Cross-browser CSS with fallbacks
+- Standard Web APIs only

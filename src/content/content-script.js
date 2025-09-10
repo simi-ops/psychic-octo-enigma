@@ -1057,21 +1057,15 @@ function findParagraphElement(target) {
  */
 async function processSelectedParagraph(paragraph) {
   try {
-    // Clean up any existing sessions
     if (currentTypingSession) {
       await cleanupCurrentSession();
     }
     
-    // Deactivate selection mode
     deactivateSelectionMode();
-    
-    // Start inline typing
     window.inlineTyping.startTyping(paragraph);
-    
     showSelectionSuccess('Start typing to begin practice!');
     
   } catch (error) {
-    console.error('Error processing paragraph selection:', error);
     showSelectionError('Error processing selection. Please try again.');
   }
 }

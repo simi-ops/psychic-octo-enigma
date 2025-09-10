@@ -61,20 +61,18 @@ class StatsPopup {
   }
 
   showSummary() {
-    console.log('showSummary() called');
-    if (!this.popup) {
-      console.log('No popup exists for summary');
-      return;
-    }
+    if (!this.popup) return;
 
     const timeElapsed = (Date.now() - this.startTime) / 1000;
     const wpm = timeElapsed > 0 ? Math.round((this.completedChars / 5) / (timeElapsed / 60)) : 0;
     const accuracy = this.completedChars > 0 ? Math.round(((this.completedChars - this.errors) / this.completedChars) * 100) : 100;
 
-    console.log('Summary stats:', { wpm, accuracy, timeElapsed, completedChars: this.completedChars, errors: this.errors });
+    const recordUpdate = window.personalRecords.updateRecords(wpm, accuracy);
+    const records = window.personalRecords.getRecords();
 
     this.popup.innerHTML = `
       <div class="stats-header">🎉 Session Complete!</div>
+      ${recordUpdate.isNewRecord ? `<div class="new-records">${recordUpdate.updates.join('<br>')}</div>` : ''}
       <div class="summary-content">
         <div class="summary-stat">
           <div class="summary-label">Final WPM</div>
@@ -97,10 +95,18 @@ class StatsPopup {
           <div class="summary-value">${this.errors}</div>
         </div>
       </div>
+      <div class="records-section">
+        <div class="records-title">Personal Records</div>
+        <div class="records-content">
+          <div class="record-item">Best WPM: <strong>${records.bestWPM}</strong></div>
+          <div class="record-item">Best Accuracy: <strong>${records.bestAccuracy}%</strong></div>
+          <div class="record-item">Total Sessions: <strong>${records.totalSessions}</strong></div>
+        </div>
+      </div>
       <button class="summary-close-btn" onclick="window.statsPopup.hide()">Close</button>
     `;
 
-    setTimeout(() => this.hide(), 5000); // Auto-close after 5 seconds
+    setTimeout(() => this.hide(), 8000);
   }
 
   hide() {
@@ -220,6 +226,44 @@ class StatsPopup {
         font-size: 18px;
         font-weight: bold;
         color: #2E7D32;
+      }
+
+      .records-section {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid #eee;
+      }
+
+      .records-title {
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 8px;
+        color: #4CAF50;
+        font-size: 14px;
+      }
+
+      .records-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .record-item {
+        font-size: 12px;
+        color: #666;
+        text-align: center;
+      }
+
+      .new-records {
+        background: #e8f5e8;
+        border: 1px solid #4CAF50;
+        border-radius: 4px;
+        padding: 8px;
+        margin-bottom: 12px;
+        font-size: 12px;
+        color: #2E7D32;
+        text-align: center;
+        font-weight: bold;
       }
 
       .summary-close-btn {
