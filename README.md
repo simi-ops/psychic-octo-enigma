@@ -1,5 +1,5 @@
 # Webpage Typing Practice Extension
-
+## Instant Typing Practice
 A browser extension that transforms any webpage content into interactive typing practice sessions while preserving the original formatting.
 
 ## Features
